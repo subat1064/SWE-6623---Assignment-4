@@ -1,0 +1,8 @@
+# Do not publish secrets or local system files
+.env
+.env.*
+!.env.example
+.DS_Store
+node_modules/
+.vscode/
+*.log
