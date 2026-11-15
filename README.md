@@ -2,6 +2,8 @@
 
 Giftlinq is a gift recommendation website. The user enters the general interests, an age group, and a budget, and the app ranks gift ideas from a demo catalog. It is a runnable prototype built with HTML, CSS, vanilla JavaScript (ES modules), Bootstrap CSS, and browser localStorage. No backend, database, npm, or framework is required.
 
+You may notice a couple branches that have the ebay api partially implemented. You can feel free to check those out, but they do not currently fully work. Unsure what's missing in it. The most up-to-date one doing so is `MergingEbayApi`
+
 Repository: https://github.com/subat1064/SWE-6623---Assignment-4
 
 ## How to run it
