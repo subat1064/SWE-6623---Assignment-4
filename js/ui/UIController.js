@@ -89,7 +89,6 @@ export class UIController {
       root.textContent = 'No gifts match. Try a different budget or age group.';
       return;
     }
-    // Emoji stands in for product photos (the demo catalog has no images).
     for (const gift of gifts) {
       const card = document.createElement('article');
       card.className = 'product-card';
