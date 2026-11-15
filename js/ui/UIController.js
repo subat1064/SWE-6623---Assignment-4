@@ -6,6 +6,7 @@ export class UIController {
     $('gift-form').addEventListener('submit', e => this.handleSearch(e));
     $('save-profile').addEventListener('click', () => this.saveRecipient());
     $('remember').checked = this.storage.persist;
+
     $('remember').addEventListener('change', e => {
       try {
         this.storage.setPersistence(e.target.checked);
@@ -15,6 +16,7 @@ export class UIController {
         this.showMessage(err.message, 'danger');
       }
     });
+
     $('clear-data').addEventListener('click', () => {
       if (confirm('Clear all saved Giftlinq gifts, searches, and tab-only profiles?')) {
         this.storage.clearAll();
@@ -26,6 +28,7 @@ export class UIController {
         this.showMessage('Giftlinq data cleared.', 'success');
       }
     });
+
     this.renderSaved();
     this.renderProfiles();
     this.renderSearches();
@@ -44,11 +47,13 @@ export class UIController {
   readRecipient() {
     const nickname = $('nickname').value.trim();
     if (nickname && (/[@\d]/.test(nickname) || nickname.length > 40)) throw new Error('Use a generic nickname without numbers or contact details.');
+
     const interests = $('interests').value.toLowerCase().split(',').map(x => x.trim()).filter(Boolean);
     // Allow simple category words only: no emails, URLs, digits, or contact details.
     if (!interests.length || interests.length > 5 || interests.some(x => !(/^[a-z][a-z -]{1,23}$/.test(x)))) {
       throw new Error('Enter 1–5 general interest topics using letters only (e.g., gaming, books).');
     }
+
     const minPrice = Number($('min-price').value), maxPrice = Number($('max-price').value);
     if (!$('min-price').value || !$('max-price').value || !Number.isFinite(minPrice) || !Number.isFinite(maxPrice) || minPrice < 0 || maxPrice < minPrice || maxPrice > 10000) {
       throw new Error('Enter a valid budget between $0 and $10,000.');
@@ -165,6 +170,7 @@ export class UIController {
       root.textContent = 'No gifts saved yet.';
       return;
     }
+
     for (const gift of gifts) {
       const row = document.createElement('div');
       row.className = 'mini-row';
@@ -206,6 +212,7 @@ export class UIController {
       root.textContent = 'No tab-only profiles.';
       return;
     }
+
     for (const p of profiles) {
       const row = document.createElement('div');
       row.className = 'mini-row';
@@ -245,6 +252,7 @@ export class UIController {
       root.textContent = 'No searches yet.';
       return;
     }
+    
     for (const s of searches) {
       const row = document.createElement('div');
       row.className = 'mini-row';
