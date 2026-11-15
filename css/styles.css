@@ -1,3 +1,12 @@
+/* Instrument Sans (variable weight), self-hosted so no third-party font request is made */
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("../fonts/instrument-sans-latin-wght-normal.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Giftlinq dashboard theme: light grey canvas, white cards, violet + teal accents */
 :root {
   --bg: #f5f5f6;
@@ -12,8 +21,9 @@
   --dark: #0f1115;
 }
 
-body { background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
-h1, h2 { letter-spacing: -0.01em; }
+body { background: var(--bg); color: var(--ink); font-family: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
+h1, h2, h3 { letter-spacing: -0.02em; font-weight: 500; }
+button, input, select { font-family: inherit; }
 .muted { color: var(--muted); font-size: .9rem; }
 
 /* Layout */
@@ -24,9 +34,9 @@ h1, h2 { letter-spacing: -0.01em; }
 .sidebar { background: var(--card); border-right: 1px solid var(--line); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .brand { display: flex; align-items: center; gap: .75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
 .brand-mark { font-size: 1.6rem; }
-.brand-name { font-size: 1.25rem; font-weight: 600; line-height: 1.1; }
+.brand-name { font-size: 1.25rem; font-weight: 500; line-height: 1.1; }
 .brand-sub { font-size: .75rem; color: var(--muted); }
-.nav-group { font-size: .95rem; font-weight: 600; margin: 1rem 0 .4rem; }
+.nav-group { font-size: .95rem; font-weight: 500; margin: 1rem 0 .4rem; }
 .nav-link-item { display: block; padding: .6rem .85rem; margin-bottom: .2rem; border-radius: 10px; color: #3b3f48; text-decoration: none; }
 .nav-link-item:hover { background: var(--violet-soft); }
 .nav-link-item.active { background: var(--violet); color: #fff; }
@@ -37,15 +47,15 @@ h1, h2 { letter-spacing: -0.01em; }
 /* Page header */
 .crumbs { color: var(--muted); margin-bottom: .5rem; }
 .crumbs span { color: var(--ink); }
-.page-head h1 { font-size: 2.1rem; font-weight: 600; margin: 0; }
+.page-head h1 { font-size: 2.1rem; font-weight: 500; margin: 0; }
 .page-head p { color: var(--muted); margin: .25rem 0 1.25rem; }
 .alert { border-radius: 12px; }
 
 /* Stat cards */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
 .stat { position: relative; overflow: hidden; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 1.1rem 1.25rem 4.2rem; }
-.stat h2 { font-size: 1.05rem; font-weight: 600; margin: 0 0 .9rem; }
-.stat-num { font-size: 2rem; font-weight: 600; line-height: 1; }
+.stat h2 { font-size: 1.05rem; font-weight: 500; margin: 0 0 .9rem; }
+.stat-num { font-size: 2rem; font-weight: 500; line-height: 1; }
 .stat-cap { font-size: .8rem; color: var(--muted); margin-top: .35rem; }
 .stat::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3.4rem; clip-path: polygon(0 80%, 15% 55%, 30% 70%, 50% 40%, 70% 50%, 85% 20%, 100% 30%, 100% 100%, 0 100%); }
 .stat-violet::after { background: linear-gradient(180deg, #c9a6f7, var(--violet-soft)); }
@@ -54,7 +64,7 @@ h1, h2 { letter-spacing: -0.01em; }
 /* Panels */
 .panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 1.4rem; margin-bottom: 1.25rem; }
 .panel-head { display: flex; justify-content: space-between; align-items: baseline; }
-.panel-title { font-size: 1.5rem; font-weight: 600; margin: 0 0 1rem; }
+.panel-title { font-size: 1.5rem; font-weight: 500; margin: 0 0 1rem; }
 
 /* Form */
 .find-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
@@ -78,7 +88,7 @@ h1, h2 { letter-spacing: -0.01em; }
 .art-games { background: #e4e8fb; }
 .art-home { background: #e1f3ec; }
 .art-fitness { background: #f9e4dc; }
-.product-card h3 { font-size: 1.05rem; font-weight: 600; margin: 0; }
+.product-card h3 { font-size: 1.05rem; font-weight: 500; margin: 0; }
 .product-price { font-size: 1.05rem; font-weight: 500; }
 .product-meta { font-size: .85rem; color: var(--muted); }
 .product-foot { display: flex; justify-content: space-between; align-items: center; margin-top: .6rem; gap: .5rem; }
