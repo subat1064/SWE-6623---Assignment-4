@@ -1,55 +1,121 @@
 # Giftlinq — Assignment 4
 
-A runnable, **static-only** Christmas gift recommendation prototype. Built only with **HTML, CSS, vanilla JavaScript (ES modules), Bootstrap CSS, browser localStorage, GitHub, GitHub Pages, and VS Code**. No backend, database, npm, or framework is required.
+Giftlinq is a gift recommendation website. The user enters the general interests, an age group, and a budget, and the app ranks gift ideas from a demo catalog. It is a runnable prototype built with HTML, CSS, vanilla JavaScript (ES modules), Bootstrap CSS, and browser localStorage. No backend, database, npm, or framework is required.
 
-## Run it in VS Code
-1. Download/extract this folder or clone its GitHub repository.
-2. Open this folder in VS Code (**File → Open Folder**).
-3. Install the **Live Server** VS Code extension, if needed.
-4. Right-click `index.html` and select **Open with Live Server**. (Do not use `file://`; ES modules need an HTTP server.)
-5. Enter `gaming, lego`, age `Child`, budget `$0–$75`, and click **Find gift ideas**.
-6. Save a gift, mark it purchased, save a tab-only recipient profile, and test the opt-in **Remember** checkbox.
-7. Use **Clear saved data** to delete Giftlinq storage and tab profiles.
+Repository: https://github.com/subat1064/SWE-6623---Assignment-4
 
-## Completed
-- Responsive HTML/CSS/Bootstrap interface; working form and validation.
-- Client-side three-layer organization (presentation, application, data).
-- `Recipient`, `Gift`, `RecipientManager`, `GiftRecommender`, `StorageService`, `UIController` and `EbayAPIService` classes with required methods; `LoginService` is an explicit unsupported interface.
-- 10 **fictional** sample gift records with price, quantity, description, category, and condition.
-- Age and price filtering, interest-based ranking, gift saving, removal, purchased state, and recent searches.
-- Recipient profiles in **tab memory only**; gift list and general search topics in tab memory unless the user opts into localStorage.
-- No password or API token collection, no analytics, no personal data sent to a third party, and safe DOM rendering using `textContent`.
-- Content Security Policy restricts JavaScript to same-origin scripts. Bootstrap CSS is the only external asset.
+## How to run it
 
-## Not yet implemented (must not be claimed complete)
-- **Live eBay Browse API** results: eBay OAuth credentials must not be exposed in a static GitHub Pages application. `EbayAPIService` defines the methods and JSON mapper but intentionally refuses live calls. A secure token broker or changed architecture is required for real eBay search.
-- Real user login: secure account login is not possible with the stated no-backend/localStorage-only architecture; `LoginService` is a placeholder.
-- Real inventory, live product images, and checkout.
+You need a web browser, an internet connection, and any computer terminal (PyCharm, VS Code, local terminal). The app must be served over HTTP. Opening `index.html` by double-clicking will not work, because browsers block ES modules on `file://` pages.
 
-## Architecture and files
-- Presentation: `index.html`, `css/styles.css`, `js/ui/UIController.js`
-- Application: `js/models/`, `js/services/GiftRecommender.js`, `js/services/RecipientManager.js`, `js/services/EbayAPIService.js`, `js/services/LoginService.js`
-- Data: `js/services/StorageService.js`, `js/data/sampleGifts.js`, opt-in localStorage
-- Bootstrap stylesheet is loaded from a CDN. No JavaScript libraries are used.
+**Option A: Python (no install needed on a Mac)**
+
+1. Clone the repo and go into the folder:
+   ```bash
+   git clone https://github.com/subat1064/SWE-6623---Assignment-4.git
+   cd SWE-6623---Assignment-4
+   ```
+2. Start a local server:
+   ```bash
+   python3 -m http.server 8000
+   ```
+   On Windows, use `python -m http.server 8000`.
+3. Open **http://localhost:8000** in your browser.
+4. Press `Ctrl+C` in the terminal to stop the server.
+
+**Option B: VS Code**
+
+1. Open the project folder in VS Code (**File → Open Folder**).
+2. Install the **Live Server** extension.
+3. Right-click `index.html` and choose **Open with Live Server**.
+
+## Try it
+
+1. Enter the interests `gaming, lego`, set Age group to **Child**, and set the budget to **$0 to $75**.
+2. Click **Find gift ideas**.
+3. Click the round teal arrow on a card to save the gift. It appears under **Saved gifts**, and the summary cards at the top update.
+4. Click **Mark purchased** or **Remove** on a saved gift.
+5. Click **Save profile for this tab**, then **Load** it again from the Profiles box.
+6. In the sidebar, click **Remember** to save a gift, and refresh the page. Click **Clear saved data** to erase everything.
+
+## What is finished
+
+- Dashboard-style responsive user interface: sidebar, four summary cards (gift ideas found, saved gifts, purchased, recent searches), search form, product cards, and saved-gift list.
+- Form validation for interests, nickname, and budget.
+- Filtering by price and age group, and ranking by matching interests.
+- Saving, removing, and marking gifts as purchased.
+- Recent searches list.
+- Recipient profiles kept in tab memory only.
+- Opt-in localStorage for the gift list and general search topics.
+- A clear-all button.
+- A demo catalog of 10 gifts with price, quantity, category, condition, and description.
+
+## What is not finished
+
+- **Live eBay results.** `EbayAPIService` defines the methods and a response mapper, but live calls are disabled and throw an error. eBay credentials cannot be stored safely in a static page, so real search would need a secure token service or a different architecture.
+- **User login.** `LoginService` is a placeholder that returns "not supported." Secure login needs a backend.
+- **Real inventory, product photos, and checkout.** Mostly sample data.
+
+## Project structure
+
+```
+index.html                    Page layout (sidebar, summary cards, form, results)
+css/styles.css                Dashboard theme
+fonts/                        Instrument Sans font file and its license
+js/
+  app.js                      Creates the objects and starts the UI
+  models/
+    Recipient.js              Recipient details (age group, interests, budget)
+    Gift.js                   One gift and its product details
+  services/
+    GiftRecommender.js        Filters and ranks gifts
+    RecipientManager.js       Tab-only recipient profiles
+    StorageService.js         Opt-in localStorage for gifts and searches
+    EbayAPIService.js         Planned eBay integration (disabled stub)
+    LoginService.js           Planned login (unsupported stub)
+  ui/
+    UIController.js           Reads the form, renders results, handles clicks
+  data/
+    sampleGifts.js            Fictional demo catalog
+```
+
+**Layers:** presentation (`index.html`, `css/`, `js/ui/`), application (`js/models/`, `GiftRecommender`, `RecipientManager`, `EbayAPIService`, `LoginService`), and data (`StorageService`, `js/data/`).
+
+## Classes and methods
+
+| Class | Main methods | Status |
+|---|---|---|
+| `Recipient` | `updateDetails()` | Done |
+| `Gift` | `getProductDetails()` | Done |
+| `RecipientManager` | `getRecipients()`, `addRecipient()`, `editRecipient()`, `deleteRecipient()`, `clear()` | Done |
+| `GiftRecommender` | `createSearchQuery()`, `filterProducts()`, `rankProducts()`, `generateRecommendations()` | Done (demo catalog only) |
+| `StorageService` | `setPersistence()`, `saveGift()`, `getSavedGifts()`, `removeGift()`, `togglePurchased()`, `saveSearch()`, `getSearches()`, `clearAll()` | Done |
+| `UIController` | `initialize()`, `readRecipient()`, `handleSearch()`, `displayRecommendations()`, `renderSaved()`, `renderProfiles()`, `renderSearches()`, `updateStats()` | Done |
+| `EbayAPIService` | `searchProducts()`, `getProductDetails()`, `handleAPIError()`, `parseProductResponse()` | Stub (live calls disabled) |
+| `LoginService` | `login()`, `logout()`, `validateCredentials()` | Stub |
 
 ## Privacy requirement (NFR-9)
-**The application shall minimize personal information collection, shall never store passwords, tokens, or recipient profiles in localStorage, shall require explicit opt-in before persisting gift lists or general search topics, and shall not transmit recipient profiles to retailers.**
 
-The prototype implements this by accepting general topics and optional nicknames, rejecting obvious numbers/contact details in form fields, keeping recipient profiles in memory only, using a small allowlist of localStorage keys, providing a clear-data control, and never calling an external API in demo mode. **Limitations:** browser storage is unencrypted and accessible to someone with access to the device or malicious same-origin JavaScript; validation cannot guarantee all entered text is non-PII; Bootstrap CDN receives normal web request metadata; no design can guarantee zero leakage after every possible breach.
+The application minimizes personal information. It never stores passwords, tokens, or recipient profiles in localStorage, does not send recipient profiles to retailers.
 
-## GitHub upload (terminal in project root)
-```bash
-git init
-git add .
-git commit -m "Assignment 4 runnable privacy-first Giftlinq prototype"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/giftlinq.git
-git push -u origin main
-```
-Create the empty `giftlinq` GitHub repository first; replace `YOUR-USERNAME`. Do not add API secrets. Invite teammates through GitHub Settings → Collaborators.
+The application accepts general topics and optional nicknames, rejects numbers and contact details in form fields, keeps profiles in memory only, allows only two localStorage keys, offers a clear-data control, and makes no external API calls in demo mode.
 
-## GitHub Pages (optional)
-Repository → Settings → Pages → Deploy from a branch → `main` → `/ (root)` → Save. GitHub Pages may require a public repository depending on account settings.
+Our limitations include browser storage that is not encrypted and can be read by someone with access to the device. Validation cannot guarantee that every entry is free of personal information. The Bootstrap CDN receives normal web request metadata.
 
-## Submission
-Upload **one ZIP** containing the complete project, including this README and `docs/`. Include the GitHub repository URL in the submission. See `docs/STEP_BY_STEP.md` for a complete walkthrough.
+## AI usage statement
+
+AI tools were used in this project. ChatGPT-6 was used by Aminah Babar for troubleshooting and guidance while setting up and testing the eBay API integration, and working through errors and getting the backend connected to the Sandbox API. Aminah did the testing and the set-up in the terminal herself. Claude was used by Subat Amin to create the user interface for the application (CSS, JavaScript), but deployment, implementation, and testing were done herself before committing the design. Ariyana Perkins used ChatGPT-6 to create an initial structure but the code was edited by the team and the AI-generated response was not our final solution.
+
+## Team
+
+| Member | Emails |
+|---|---|
+| Subat Amin | (samin3) |
+| Aminah Babar | (ababar5) |
+| Hunter Osborne | (hosborn7) |
+| Ariyana Perkins | (aperki35) |
+
+## Credits
+
+- Bootstrap 5.3.3 (CSS only, loaded from the jsDelivr CDN).
+- Instrument Sans font, included in `fonts/` with its license file.
