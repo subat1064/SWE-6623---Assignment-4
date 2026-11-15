@@ -69,30 +69,58 @@ export class UIController {
     const root = $('results');
     root.replaceChildren();
     $('count').textContent = gifts.length + ' results';
+    $('stat-found').textContent = gifts.length;
     if (!gifts.length) {
       root.textContent = 'No gifts match. Try a different budget or age group.';
       return;
     }
+    // Emoji stands in for product photos (the demo catalog has no images).
+    const icons = { Toys: '🧱', Electronics: '🎧', Books: '📚', Arts: '🎨', Kitchen: '🍳', Games: '🎲', Home: '🪴', Fitness: '🏋️' };
     for (const gift of gifts) {
       const card = document.createElement('article');
-      card.className = 'gift';
+      card.className = 'product-card';
+      const art = document.createElement('div');
+      art.className = 'product-art art-' + gift.category.toLowerCase();
+      art.textContent = icons[gift.category] || '🎁';
+      art.setAttribute('aria-hidden', 'true');
       const title = document.createElement('h3');
       title.textContent = gift.title;
-      const detail = document.createElement('p');
-      detail.textContent = `$${gift.price.toFixed(2)} · ${gift.category} · ${gift.condition} · ${gift.quantity} available (sample) · ${gift.description}`;
+      const price = document.createElement('div');
+      price.className = 'product-price';
+      price.textContent = '$' + gift.price.toFixed(2);
+      const detail = document.createElement('div');
+      detail.className = 'product-meta';
+      detail.textContent = `${gift.category} · ${gift.condition} · Stock: ${gift.quantity} items (sample)`;
+      const description = document.createElement('div');
+      description.className = 'product-meta';
+      description.textContent = gift.description;
       const chip = document.createElement('span');
       chip.className = 'chip';
       chip.textContent = gift.matchScore + ' matching interest(s)';
-      const button = this.button('Save gift', 'btn btn-sm btn-outline-primary', () => {
+      const button = this.button('↗', 'arrow-btn', () => {
         try {
           this.storage.saveGift(gift.getProductDetails());
-          this.renderSaved(); this.showMessage('Gift added to saved list.', 'success');
+          this.renderSaved();
+          this.showMessage('Gift added to saved list.', 'success');
         } catch (err) {
           this.showMessage(err.message, 'danger');
         }
       });
-      card.append(title, detail, chip, button); root.append(card);
+      button.setAttribute('aria-label', 'Save ' + gift.title);
+      const foot = document.createElement('div');
+      foot.className = 'product-foot';
+      foot.append(chip, button);
+      card.append(art, title, price, detail, description, foot);
+      root.append(card);
     }
+  }
+
+  // Keeps the four summary cards in sync with saved gifts and recent searches.
+  updateStats() {
+    const saved = this.storage.getSavedGifts();
+    $('stat-saved').textContent = saved.length;
+    $('stat-purchased').textContent = saved.filter(g => g.purchased).length;
+    $('stat-searches').textContent = this.storage.getSearches().length;
   }
 
   button(label, classes, handler) {
@@ -105,6 +133,7 @@ export class UIController {
   }
 
   renderSaved() {
+    this.updateStats();
     const root = $('saved-gifts');
     root.replaceChildren();
     const gifts = this.storage.getSavedGifts();
@@ -170,6 +199,7 @@ export class UIController {
   }
 
   renderSearches() {
+    this.updateStats();
     const root = $('searches');
     root.replaceChildren();
     const searches = this.storage.getSearches();
