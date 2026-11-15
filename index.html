@@ -14,85 +14,139 @@
 </head>
 
 <body>
-  <header class="hero">
-    <div class="container py-4">
-      <h1>🎁 Giftlinq</h1>
-      <p class="mb-0">Thoughtful gift ideas, without sharing personal details.</p>
-    </div>
-  </header>
-  <main class="container py-4">
-    <div id="notice" role="status" aria-live="polite" class="alert alert-info">Demo catalog: prices and items are
-      examples, not live eBay offers.</div>
-    <div class="row g-4">
-      <section class="col-lg-5">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h2 class="h5">Find a gift</h2>
-            <form id="gift-form">
-              <label for="nickname" class="form-label">Recipient nickname (optional; no real names)</label>
-              <input id="nickname" class="form-control" maxlength="40" autocomplete="off" placeholder="e.g., Cousin">
-              <label for="age" class="form-label mt-3">Age group</label>
-              <select id="age" class="form-select">
-                <option value="all">Any</option>
-                <option value="child">Child</option>
-                <option value="teen">Teen</option>
-                <option value="adult">Adult</option>
-              </select>
-              <label for="relationship" class="form-label mt-3">Relationship</label>
-              <select id="relationship" class="form-select">
-                <option value="">Prefer not to say</option>
-                <option value="family">Family</option>
-                <option value="friend">Friend</option>
-                <option value="coworker">Coworker</option>
-                <option value="other">Other</option>
-              </select>
-              <label for="interests" class="form-label mt-3">Interests (comma-separated, general topics only)</label>
-              <input id="interests" class="form-control" maxlength="120" required autocomplete="off"
-                placeholder="gaming, books, cooking">
-              <div class="row mt-3">
-                <div class="col"><label for="min-price" class="form-label">Minimum ($)</label><input id="min-price"
-                    class="form-control" type="number" min="0" max="10000" step="1" value="0" required></div>
-                <div class="col"><label for="max-price" class="form-label">Maximum ($)</label><input id="max-price"
-                    class="form-control" type="number" min="0" max="10000" step="1" value="100" required></div>
-              </div>
-              <button class="btn btn-primary w-100 mt-3" type="submit">Find gift ideas</button>
-            </form>
-            <div class="d-flex flex-wrap gap-2 mt-3"><button id="save-profile" class="btn btn-outline-secondary btn-sm"
-                type="button">Save profile for this tab</button><button id="clear-data"
-                class="btn btn-outline-danger btn-sm" type="button">Clear saved data</button></div>
-            <div class="form-check mt-3"><input class="form-check-input" id="remember" type="checkbox"><label
-                for="remember" class="form-check-label">Remember gift list and general search topics on this device
-                (optional; not encrypted)</label></div>
-            <p class="small text-muted mt-2">Recipient profiles are never written to localStorage. Only gift catalog
-              details and general search topics may be remembered when you opt in.</p>
-            <h3 class="h6 mt-4">Profiles (this tab only)</h3>
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">🎁</span>
+        <div>
+          <div class="brand-name">Giftlinq</div>
+          <div class="brand-sub">Privacy-first gift finder</div>
+        </div>
+      </div>
+
+      <nav aria-label="Sections">
+        <div class="nav-group">Gifts</div>
+        <a class="nav-link-item active" href="#find">Find a gift</a>
+        <a class="nav-link-item" href="#recommendations">Recommendations</a>
+        <a class="nav-link-item" href="#saved">Saved gifts</a>
+        <div class="nav-group">Recipients</div>
+        <a class="nav-link-item" href="#profiles-card">Profiles</a>
+        <a class="nav-link-item" href="#searches-card">Recent searches</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="nav-group">Privacy settings</div>
+        <div class="form-check">
+          <input class="form-check-input" id="remember" type="checkbox">
+          <label for="remember" class="form-check-label small">Remember gift list and search topics on this device
+            (optional; not encrypted)</label>
+        </div>
+        <button id="clear-data" class="btn btn-sm btn-outline-danger mt-2" type="button">Clear saved data</button>
+        <div class="promo">
+          <strong>Your details stay with you</strong>
+          <p>Recipient profiles are never written to browser storage. Only gift details and general search topics can
+            be remembered, and only if you opt in.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content">
+      <p class="crumbs">Gift finder / <span>Recommendations</span></p>
+      <header class="page-head">
+        <div>
+          <h1>Find the right gift</h1>
+          <p>Enter general interests and a budget. Giftlinq ranks the demo catalog for you.</p>
+        </div>
+      </header>
+
+      <div id="notice" role="status" aria-live="polite" class="alert alert-info">Demo catalog: prices and items are
+        examples, not live eBay offers.</div>
+
+      <!-- Stat cards -->
+      <section class="stats" aria-label="Summary">
+        <div class="stat stat-violet"><h2>Gift ideas found</h2><div class="stat-num" id="stat-found">0</div><div
+            class="stat-cap">In your latest search</div></div>
+        <div class="stat stat-teal"><h2>Saved gifts</h2><div class="stat-num" id="stat-saved">0</div><div
+            class="stat-cap">On your list</div></div>
+        <div class="stat stat-violet"><h2>Purchased</h2><div class="stat-num" id="stat-purchased">0</div><div
+            class="stat-cap">Marked as bought</div></div>
+        <div class="stat stat-teal"><h2>Recent searches</h2><div class="stat-num" id="stat-searches">0</div><div
+            class="stat-cap">Topics you tried</div></div>
+      </section>
+
+      <!-- Search form -->
+      <section class="panel" id="find">
+        <h2 class="panel-title">Find a gift</h2>
+        <form id="gift-form" class="find-grid">
+          <div><label for="nickname" class="form-label">Recipient nickname (optional; no real names)</label>
+            <input id="nickname" class="form-control" maxlength="40" autocomplete="off" placeholder="e.g., Cousin"></div>
+          <div><label for="age" class="form-label">Age group</label>
+            <select id="age" class="form-select">
+              <option value="all">Any</option>
+              <option value="child">Child</option>
+              <option value="teen">Teen</option>
+              <option value="adult">Adult</option>
+            </select></div>
+          <div><label for="relationship" class="form-label">Relationship</label>
+            <select id="relationship" class="form-select">
+              <option value="">Prefer not to say</option>
+              <option value="family">Family</option>
+              <option value="friend">Friend</option>
+              <option value="coworker">Coworker</option>
+              <option value="other">Other</option>
+            </select></div>
+          <div class="span-2"><label for="interests" class="form-label">Interests (comma-separated, general topics
+              only)</label>
+            <input id="interests" class="form-control" maxlength="120" required autocomplete="off"
+              placeholder="gaming, books, cooking"></div>
+          <div><label for="min-price" class="form-label">Minimum ($)</label>
+            <input id="min-price" class="form-control" type="number" min="0" max="10000" step="1" value="0" required>
+          </div>
+          <div><label for="max-price" class="form-label">Maximum ($)</label>
+            <input id="max-price" class="form-control" type="number" min="0" max="10000" step="1" value="100" required>
+          </div>
+          <div class="form-actions span-2">
+            <button class="btn-dark-pill" type="submit">Find gift ideas</button>
+            <button id="save-profile" class="btn-ghost" type="button">Save profile for this tab</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Results -->
+      <section class="panel" id="recommendations">
+        <div class="panel-head">
+          <h2 class="panel-title">Gift recommendations</h2>
+          <span id="count" class="muted"></span>
+        </div>
+        <div id="results" class="product-grid" aria-live="polite">Search to see sample recommendations.</div>
+      </section>
+
+      <!-- Saved / profiles / searches -->
+      <div class="lower">
+        <section class="panel" id="saved">
+          <h2 class="panel-title">Saved gifts</h2>
+          <div id="saved-gifts"></div>
+        </section>
+        <div class="lower-side">
+          <section class="panel" id="profiles-card">
+            <h2 class="panel-title">Profiles (this tab only)</h2>
             <div id="profiles"></div>
-            <h3 class="h6 mt-3">Recent searches</h3>
+          </section>
+          <section class="panel" id="searches-card">
+            <h2 class="panel-title">Recent searches</h2>
             <div id="searches"></div>
-          </div>
+          </section>
         </div>
-      </section>
-      <section class="col-lg-7">
-        <div class="card shadow-sm mb-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <h2 class="h5">Gift recommendations</h2><span id="count" class="small text-muted"></span>
-            </div>
-            <div id="results" aria-live="polite">Search to see sample recommendations.</div>
-          </div>
-        </div>
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h2 class="h5">Saved gifts</h2>
-            <div id="saved-gifts"></div>
-          </div>
-        </div>
-      </section>
-    </div>
-    <p class="small text-muted mt-4">Privacy: no account, passwords, payment details, analytics, or recipient
-      information is sent to a retailer in this prototype. Do not enter names, addresses, health details, or other
-      sensitive information. Browser storage is not secure against device access or malicious same-origin scripts.</p>
-  </main>
+      </div>
+
+      <p class="small text-muted mt-4">Privacy: no account, passwords, payment details, analytics, or recipient
+        information is sent to a retailer in this prototype. Do not enter names, addresses, health details, or other
+        sensitive information. Browser storage is not secure against device access or malicious same-origin scripts.</p>
+    </main>
+  </div>
 </body>
 
 </html>
