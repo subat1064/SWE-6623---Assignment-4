@@ -15,9 +15,16 @@ export class EbayAPIService {
         params.set("maxPrice", filters.maxPrice);
     }
 
-    const response = await fetch(
-        `http://localhost:3000/api/ebay/search?${params.toString()}`
-    );
+    // const response = await fetch(
+    //     `http://localhost:3000/api/ebay/search?${params.toString()}`
+    // );
+
+    // so basically if you run this with
+    // python -m http.server PORT
+    // with PORT being the port used, for me that's 5500
+    // then it doesn't throw big scary errors when loading the page.
+    // Sadly it doesn't work still...
+    const response = ['localhost', '127.0.0.1'].includes("http://localhost:3000");
 
     if (!response.ok) {
         this.handleAPIError(response);
