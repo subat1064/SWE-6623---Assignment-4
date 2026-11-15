@@ -36,6 +36,11 @@ export class UIController {
     $('notice').textContent = message;
   }
 
+  /** 
+   * Goes through the data of the recipient based on what the user entered.
+   * 
+   * @returns The data of the recipient.
+   */
   readRecipient() {
     const nickname = $('nickname').value.trim();
     if (nickname && (/[@\d]/.test(nickname) || nickname.length > 40)) throw new Error('Use a generic nickname without numbers or contact details.');
@@ -51,6 +56,11 @@ export class UIController {
     return new Recipient({ nickname, age: $('age').value, relationship: $('relationship').value, interests, minPrice, maxPrice });
   }
   
+  /**
+   * Goes through the required functions to handle searching for gifts.
+   * 
+   * @param {*} event - The triggering event of the search.
+   */
   async handleSearch(event) {
     event.preventDefault();
     try {
@@ -65,6 +75,11 @@ export class UIController {
     }
   }
 
+  /**
+   * Takes in the gift recommendations for a user and displays them.
+   * 
+   * @param {*} gifts - The collection of gifts for a particular recipient.
+   */
   displayRecommendations(gifts) {
     const root = $('results');
     root.replaceChildren();
@@ -97,6 +112,7 @@ export class UIController {
       const chip = document.createElement('span');
       chip.className = 'chip';
       chip.textContent = gift.matchScore + ' matching interest(s)';
+
       const button = this.button('↗', 'arrow-btn', () => {
         try {
           this.storage.saveGift(gift.getProductDetails());
@@ -106,6 +122,7 @@ export class UIController {
           this.showMessage(err.message, 'danger');
         }
       });
+
       button.setAttribute('aria-label', 'Save ' + gift.title);
       const foot = document.createElement('div');
       foot.className = 'product-foot';
@@ -115,7 +132,9 @@ export class UIController {
     }
   }
 
-  // Keeps the four summary cards in sync with saved gifts and recent searches.
+  /**
+   *  Keeps the four summary cards in sync with saved gifts and recent searches.
+   */
   updateStats() {
     const saved = this.storage.getSavedGifts();
     $('stat-saved').textContent = saved.length;
@@ -123,6 +142,14 @@ export class UIController {
     $('stat-searches').textContent = this.storage.getSearches().length;
   }
 
+  /**
+   * Handles making buttons.
+   * 
+   * @param {*} label - What should be on the button.
+   * @param {*} classes - Class of the button
+   * @param {*} handler - The event handler.
+   * @returns 
+   */
   button(label, classes, handler) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -132,6 +159,9 @@ export class UIController {
     return button;
   }
 
+  /**
+   * Shows the gifts the user has saved.
+   */
   renderSaved() {
     this.updateStats();
     const root = $('saved-gifts');
@@ -158,6 +188,9 @@ export class UIController {
     }
   }
 
+  /**
+   * Saves a recipient in the current tab, not properly saved across sessions.
+   */
   saveRecipient() {
     try {
       this.recipientManager.addRecipient(this.readRecipient());
@@ -168,6 +201,9 @@ export class UIController {
     }
   }
 
+  /**
+   * Shows the user all saved profiles.
+   */
   renderProfiles() {
     const root = $('profiles');
     root.replaceChildren();
@@ -189,6 +225,11 @@ export class UIController {
     }
   }
 
+  /**
+   * Used to load the data of a recipient.
+   * 
+   * @param {*} p - User profile. 
+   */
   loadRecipient(p) {
     $('nickname').value = p.nickname;
     $('age').value = p.age;
@@ -198,6 +239,9 @@ export class UIController {
     $('max-price').value = p.maxPrice;
   }
 
+  /**
+   * Shows the user their results based on what they have searched.
+   */
   renderSearches() {
     this.updateStats();
     const root = $('searches');
