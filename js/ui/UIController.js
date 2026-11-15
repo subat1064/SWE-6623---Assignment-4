@@ -90,14 +90,9 @@ export class UIController {
       return;
     }
     // Emoji stands in for product photos (the demo catalog has no images).
-    const icons = { Toys: '🧱', Electronics: '🎧', Books: '📚', Arts: '🎨', Kitchen: '🍳', Games: '🎲', Home: '🪴', Fitness: '🏋️' };
     for (const gift of gifts) {
       const card = document.createElement('article');
       card.className = 'product-card';
-      const art = document.createElement('div');
-      art.className = 'product-art art-' + gift.category.toLowerCase();
-      art.textContent = icons[gift.category] || '🎁';
-      art.setAttribute('aria-hidden', 'true');
       const title = document.createElement('h3');
       title.textContent = gift.title;
       const price = document.createElement('div');
@@ -127,7 +122,7 @@ export class UIController {
       const foot = document.createElement('div');
       foot.className = 'product-foot';
       foot.append(chip, button);
-      card.append(art, title, price, detail, description, foot);
+      card.append(title, price, detail, description, foot);
       root.append(card);
     }
   }
