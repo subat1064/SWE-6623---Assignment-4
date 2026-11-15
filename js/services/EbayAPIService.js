@@ -2,9 +2,30 @@
 // No OAuth token or client secret may be placed in a public GitHub Pages app.
 // Live calls are intentionally disabled until a secure token service exists.
 export class EbayAPIService {
-  async searchProducts(query, filters = {}) { 
-    void query; void filters; throw new Error('Live eBay search is unavailable in the static-only build. Use demo recommendations.');
-  }
+ async searchProducts(query, filters = {}) {
+    const params = new URLSearchParams({
+        q: query
+    });
+
+    if (filters.minPrice !== undefined) {
+        params.set("minPrice", filters.minPrice);
+    }
+
+    if (filters.maxPrice !== undefined) {
+        params.set("maxPrice", filters.maxPrice);
+    }
+
+    const response = await fetch(
+        `http://localhost:3000/api/ebay/search?${params.toString()}`
+    );
+
+    if (!response.ok) {
+        this.handleAPIError(response);
+    }
+
+    const data = await response.json();
+return this.parseProductResponse(data);
+}
 
   async getProductDetails(itemId) { 
     void itemId; throw new Error('Live eBay product details are not configured.'); 

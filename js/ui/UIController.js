@@ -70,11 +70,11 @@ export class UIController {
     event.preventDefault();
     try {
       const recipient = this.readRecipient();
-      const gifts = await this.recommender.generateRecommendations(recipient);
+      const gifts = await this.recommender.generateRecommendations(recipient, { live: true });
       this.displayRecommendations(gifts);
       this.storage.saveSearch(recipient);
       this.renderSearches();
-      this.showMessage('Showing ' + gifts.length + ' demo gift ideas (not live listings).', 'success');
+      this.showMessage('Showing ' + gifts.length + ' live eBay gift ideas.', 'success');
     } catch (error) {
       this.showMessage(error.message, 'danger');
     }
