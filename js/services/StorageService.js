@@ -12,6 +12,11 @@ export class StorageService {
     }
   }
 
+  /**
+   * Sets whether or not it saves the data.
+   * 
+   * @param {*} enabled - Whether or not it should be enabled.
+   */
   setPersistence(enabled) {
     this.persist = Boolean(enabled);
     try {
@@ -29,6 +34,12 @@ export class StorageService {
     }
   }
 
+  /**
+   * Returns data that has been saved.
+   * 
+   * @param {*} key - Identifier for the saved data.
+   * @returns 
+   */
   getData(key) {
     this.assertKey(key); 
     if (this.memory.has(key)) return structuredClone(this.memory.get(key));
@@ -44,6 +55,12 @@ export class StorageService {
     return [];
   }
 
+  /**
+   * Saves the data of a recipient.
+   * 
+   * @param {*} key - Identifier for the saved data.
+   * @param {*} items - The recommended gifts for the person.
+   */
   saveData(key, items) {
     this.assertKey(key); 
     if (!Array.isArray(items)) throw new Error('Invalid saved data'); 
@@ -57,10 +74,21 @@ export class StorageService {
     }
   }
 
+  /**
+   * Makes sure the key is valid.
+   * 
+   * @param {*} key - Identifier for the saved data.
+   */
   assertKey(key) { 
     if (!this.allowed.has(key)) throw new Error('Unsupported data type'); 
   }
 
+  /**
+   * Saves a particular recommended gift.
+   * 
+   * @param {*} gift - The gift to be saved.
+   * @returns The saved gifts
+   */
   saveGift(gift) {
     const gifts = this.getSavedGifts(); 
     const safe = { id: String(gift.id).slice(0, 80), title: String(gift.title).slice(0, 120), price: Number(gift.price), purchased: false };
@@ -70,18 +98,36 @@ export class StorageService {
     return this.getSavedGifts();
   }
 
+  /**
+   * @returns The gifts that have been saved.
+   */
   getSavedGifts() { 
     return this.getData('gifts'); 
   }
 
+  /**
+   * Removes a gift from the saved data.
+   * 
+   * @param {*} id - The ID of the gift to be removed.
+   */
   removeGift(id) { 
     this.saveData('gifts', this.getSavedGifts().filter(g => g.id !== id)); 
   }
 
+  /**
+   * Changes whether or not a gift is marked as purchases in the saved data.
+   * 
+   * @param {*} id - The ID of the gift to toggle.
+   */
   togglePurchased(id) { 
     this.saveData('gifts', this.getSavedGifts().map(g => g.id === id ? { ...g, purchased: !g.purchased } : g)); 
   }
 
+  /**
+   * Saves a particular search query
+   * 
+   * @param {*} search - The details of the search query
+   */
   saveSearch(search) {
     const safe = { topics: search.interests.slice(0, 5), minPrice: search.minPrice, maxPrice: search.maxPrice };
     const searches = this.getData('searches'); 
@@ -89,10 +135,16 @@ export class StorageService {
     this.saveData('searches', searches.slice(0, 10));
   }
 
+  /**
+   * @returns The saved searches.
+   */
   getSearches() { 
     return this.getData('searches'); 
   }
-  
+
+  /**
+   * Deletes all saved data from the memory.
+   */
   clearAll() {
     this.memory.clear(); 
     try {
